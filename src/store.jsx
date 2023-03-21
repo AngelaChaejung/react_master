@@ -19,6 +19,9 @@ const cart = createSlice({
       });
       state[number].count++;
     },
+    addItem(state, action) {
+      state.push(action.payload);
+    },
   },
 });
 
