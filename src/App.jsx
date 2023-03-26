@@ -7,6 +7,8 @@ import { addCount } from "./store";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { addWatched } from "./store/watchedListSlice";
+import axios from "axios";
+import { useQuery } from "react-query";
 
 function App() {
   const dispatch = useDispatch();
@@ -14,13 +16,25 @@ function App() {
   const state = useSelector((state) => {
     return state;
   });
-  console.log(state);
+
+  const result = useQuery(
+    "이름",
+    () =>
+      axios.get("https://codingapple1.github.io/userdata.json").then((a) => {
+        console.log("requested");
+        return a.data;
+      }),
+    { staleTime: 2000 }
+  );
+  console.log(result);
   useEffect(() => {
     localStorage.getItem("watched") ? console.log("이미있음") : localStorage.setItem("watched", JSON.stringify([]));
   }, []);
 
   return (
     <div>
+      reactQuery: {result.data.name}
+      <hr />
       갖다 써보자 이름:{state.user.name} 나이:{state.user.age}
       <Button onClick={() => dispatch(changeName())}>+</Button>
       <Button onClick={() => dispatch(changeAge(1))}>나이추가</Button>{" "}
