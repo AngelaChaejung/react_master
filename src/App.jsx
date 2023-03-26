@@ -4,13 +4,20 @@ import { useDispatch, useSelector } from "react-redux";
 import Table from "react-bootstrap/Table";
 import { changeAge, changeName } from "./store/userSlice";
 import { addCount } from "./store";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { addWatched } from "./store/watchedListSlice";
 
 function App() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const state = useSelector((state) => {
     return state;
   });
   console.log(state);
+  useEffect(() => {
+    localStorage.getItem("watched") ? console.log("이미있음") : localStorage.setItem("watched", JSON.stringify([]));
+  }, []);
 
   return (
     <div>
@@ -31,7 +38,14 @@ function App() {
           <tbody>
             {state.cart.map((a, i) => (
               <tr ket={i}>
-                <td>{a.id}</td>
+                <td
+                  onClick={() => {
+                    // dispatch(addWatched(a.id));
+                    navigate(`/detail/${a.id}`);
+                  }}
+                >
+                  {a.id}
+                </td>
                 <td>{a.name}</td>
                 <td>{a.count}</td>
                 <td>
